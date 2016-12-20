@@ -1,0 +1,14 @@
+<launch>
+
+  <node name="uwb_positioning_node1" pkg="uwb_positioning" type="uwb_positioning_node.py"
+    output="screen" required="true">
+    <param name="range_topic_id" value="/range" type="string"/>
+    <param name="position_topic_id" value="/uwb_position" type="string"/>
+
+    <param name="uwb_beacon_ids" value="[101,102,103]" type="string"/>
+    <param name="uwb_beacon_positions_x" value="[0.0, 0.0, 1.2192]" type="string"/>
+    <param name="uwb_beacon_positions_y" value="[0.0, 1.8288, 1.8288]" type="string"/>
+    <!-- <param name="uwb_beacon_positions_z" value="[0.0, 0.0, 0.0]" type="string"/> -->
+  </node>
+
+</launch>

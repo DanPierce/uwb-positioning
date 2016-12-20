@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <name>uwb_positioning</name>
+  <version>0.0.0</version>
+  <description>The uwb_positioning package. Uses least squares to estimate position of a radio given range measurements to other radios of known positions.</description>
+
+  <maintainer email="jdp0009@auburn.edu">Dan Pierce</maintainer>
+  <author email="jdp0009@auburn.edu">Dan Pierce</author>
+
+  <license>
+    GAVLAB
+    No one may use this software without express, written permission from the
+    author.
+  </license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>timedomain_uwb</build_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>timedomain_uwb</run_depend>
+
+
+
+  <export>
+  </export>
+</package>
