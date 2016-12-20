@@ -2,11 +2,19 @@
 import rospy
 import sys
 import numpy as np
-# from uwb_positioning import Positioning
 from geometry_msgs.msg import PoseWithCovarianceStamped,Pose2D
 from timedomain_uwb.msg import P440Range
-# from math import pi,cos,sin
 from scipy.linalg import inv,block_diag
+
+from math import atan2
+
+# TO DO:
+#   add max time delay check
+#   add 3D positioning
+#   estimate velocity from range rate
+#   use arrays instead of matrix
+#   add max number of iterations
+#   course threshold as velocity
 
 class UwbPositioningNode:
 
@@ -33,6 +41,7 @@ class UwbPositioningNode:
     # Initial position guess
     self.pos_x = rospy.get_param('~pos_x_i',-0.4)
     self.pos_y = rospy.get_param('~pos_x_i',10.25)
+    self.psi = rospy.get_param('~heading_i',0.)
 
     self.receive_time = np.array([0.,0.,0.])
     self.Y = np.matrix((  (0.),(0.),(0.) )).transpose()
@@ -77,16 +86,23 @@ class UwbPositioningNode:
       dxhat = (inv(G.T*G)*G.T)*dy;
       xhat+=dxhat
 
+    step_x = xhat[0,0]-self.pos_x
+    step_y = xhat[1,0]-self.pos_y
+    delta_pos = pow(pow(step_x,2)+pow(step_y,2),0.5)
+    if (delta_pos>0.05):
+      self.psi = atan2(step_y,step_x)
+
     self.pos_x = xhat[0,0]
     self.pos_y = xhat[1,0]
+    
     self.Y[0,0]=0.
     self.Y[1,0]=0.
     self.Y[2,0]=0.
 
     pose_msg = Pose2D()
-    pose_msg.x = xhat[0]
-    pose_msg.y = xhat[1]
-    pose_msg.theta = 0.
+    pose_msg.x = self.pos_x
+    pose_msg.y = self.pos_y
+    pose_msg.theta = self.psi
 
     self.pose_pub.publish(pose_msg)
 
